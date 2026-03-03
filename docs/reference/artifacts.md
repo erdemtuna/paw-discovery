@@ -31,7 +31,8 @@ PAW workflows produce durable Markdown artifacts that trace reasoning and decisi
       DerivedSpec.md            # Reverse-engineered spec
       ImpactAnalysis.md         # Impact analysis (single-model mode)
       GapAnalysis.md            # Gap analysis (single-model mode)
-      REVIEW-{SPECIALIST}.md   # Per-specialist findings (SoT mode)
+      REVIEW-{SPECIALIST}.md   # Per-specialist findings (SoT mode, no perspectives)
+      REVIEW-{SPECIALIST}-{PERSPECTIVE}.md  # Per-specialist-perspective findings (SoT with perspectives)
       REVIEW-SYNTHESIS.md       # Synthesized findings (SoT mode)
       ReviewComments.md         # Review comments
 ```
@@ -69,9 +70,14 @@ PAW workflows produce durable Markdown artifacts that trace reasoning and decisi
 | Planning Docs Review | `enabled` or `disabled` |
 | Plan Generation Mode | `single-model` or `multi-model` |
 | Plan Generation Models | Comma-separated model names |
-| Planning Review Mode | `single-model` or `multi-model` |
+| Planning Review Mode | `single-model`, `multi-model`, or `society-of-thought` |
 | Planning Review Interactive | `true`, `false`, or `smart` |
 | Planning Review Models | Comma-separated model names |
+| Planning Review Specialists | `all`, comma-separated names, or `adaptive:<N>` |
+| Planning Review Interaction Mode | `parallel` or `debate` |
+| Planning Review Specialist Models | `none`, model pool, pinned pairs, or mixed |
+| Planning Review Perspectives | `none`, `auto`, or comma-separated perspective names |
+| Planning Review Perspective Cap | Positive integer |
 
 ### Spec.md
 
@@ -197,11 +203,14 @@ This decouples intent capture from phase elaboration, preserving implementer mom
 
 **Contents:**
 
-- **Review metadata** — Mode, participating specialists/models, selection rationale
-- **Prioritized findings** — Must-fix, should-fix, consider classifications with specialist attribution
+- **Review metadata** — Mode, participating specialists/models, selection rationale, perspectives applied
+- **Perspective Diversity** — Which perspectives were applied to which specialists, selection rationale, perspectives skipped (when perspectives are active)
+- **Prioritized findings** — Must-fix, should-fix, consider classifications with specialist and perspective attribution
 - **Confidence levels** — HIGH, MEDIUM, LOW per finding with supporting evidence
-- **Disagreement resolution** — How conflicting specialist perspectives were reconciled (society-of-thought)
+- **Disagreement resolution** — How conflicting specialist perspectives were reconciled, including inter-perspective conflicts
 - **Grounding status** — Flags for findings referencing code not in the diff
+
+When perspectives are active, each finding includes a `**Perspective**` field indicating which lens surfaced it (`baseline` for findings without a perspective overlay).
 
 ---
 

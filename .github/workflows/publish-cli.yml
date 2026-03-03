@@ -5,13 +5,12 @@ on:
     tags:
       - 'cli-v*'
 
-permissions:
-  id-token: write  # Required for OIDC trusted publishing
-  contents: write  # Required to create GitHub releases
-
 jobs:
-  publish:
+  publish-npm:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
     defaults:
       run:
         working-directory: cli
@@ -37,7 +36,6 @@ jobs:
         id: prerelease
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          # Check for pre-release suffixes: -alpha, -beta, -rc
           if [[ "$VERSION" =~ -(alpha|beta|rc) ]]; then
             echo "is_prerelease=true" >> $GITHUB_OUTPUT
             echo "npm_tag=beta" >> $GITHUB_OUTPUT
