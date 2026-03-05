@@ -24,6 +24,7 @@ Bootstrap skill that initializes the Discovery workflow directory structure. Thi
 | `work_title` | No | auto-derive | text |
 | `review_policy` | No | `every-stage` | `every-stage`, `final-only` |
 | `prioritization_mode` | No | `guided` | `interactive`, `guided`, `autonomous` |
+| `research` | No | `disabled` | `enabled`, `disabled` |
 | `final_review` | No | `enabled` | `enabled`, `disabled` |
 | `final_review_mode` | No | `society-of-thought` | `single-model`, `multi-model`, `society-of-thought` |
 
@@ -37,6 +38,11 @@ Bootstrap skill that initializes the Discovery workflow directory structure. Thi
 - **`interactive`**: User walks through journeys, picks depths, validates resulting prioritized roadmap in one pass
 - **`guided`** (default): User provides high-level direction, agent applies scoping and generates roadmap
 - **`autonomous`**: Agent auto-scopes based on pain severity and correlation data, generates roadmap without user input
+
+### Research Options
+
+- **`enabled`**: Opt into web research at Extraction and Correlation stages. When enabled, each stage prompts for an execution mode (autonomous/guided/skip) before running research.
+- **`disabled`** (default): No web research. Extraction and Correlation stages behave as standard.
 
 ## Work Title Derivation
 
@@ -57,6 +63,7 @@ When `work_title` is not provided, derive from (priority order):
    Discovery: [Work Title]
    Work ID: [work-id]
    Review Policy: [policy]
+   Research: [enabled/disabled]
    Final Review: [mode]
    
    Proceed with this configuration? [Yes / Adjust]
@@ -97,6 +104,7 @@ When `work_title` is not provided, derive from (priority order):
 ## Configuration
 - **Review Policy**: [every-stage|final-only]
 - **Prioritization Mode**: [interactive|guided|autonomous]
+- **Research**: [enabled|disabled]
 - **Final Review**: [enabled|disabled]
 - **Final Review Mode**: [single-model|multi-model|society-of-thought]
 
