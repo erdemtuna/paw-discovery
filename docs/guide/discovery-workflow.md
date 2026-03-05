@@ -113,13 +113,11 @@ Extracts user pain points and synthesizes user journeys from source documents:
 
 **Output**: `JourneyMap.md`
 
-After review, an interactive **Journey Scoping** checkpoint lets you define MVP depth (Full/Partial/Minimal) for each journey before prioritization.
-
 ### Stage 5: Prioritization
 
 **Skill**: `paw-discovery-prioritize`
 
-Produces a ranked MVP roadmap using multi-factor analysis:
+Merges scoping and prioritization into a single stage with configurable execution modes (interactive/guided/autonomous). Produces a ranked MVP roadmap using multi-factor analysis:
 
 1. **Business Value** — Impact on users, revenue, strategic goals
 2. **Technical Feasibility** — How much existing code can be reused
@@ -142,7 +140,7 @@ All artifacts are created in your Discovery work directory:
 ├── Extraction.md        # Themes with source attribution
 ├── CapabilityMap.md     # Codebase capabilities inventory
 ├── Correlation.md       # Theme ↔ capability connections
-├── JourneyMap.md        # Pain points, user journeys, MVP scoping
+├── JourneyMap.md        # Pain points, user journeys, feature mapping
 └── Roadmap.md           # Prioritized MVP items
 ```
 
