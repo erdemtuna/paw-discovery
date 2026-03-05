@@ -89,7 +89,7 @@ All Discovery artifacts are stored in a consistent directory structure:
 ## Configuration
 - **Review Policy**: <every-stage | final-only>
 - **Prioritization Mode**: <interactive | guided | autonomous>
-- **Research**: <enabled | disabled>
+- **Research**: <disabled | autonomous | guided>
 
 ## Input Documents
 | File | Type | Added | Status |

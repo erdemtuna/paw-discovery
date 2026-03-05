@@ -136,15 +136,14 @@ Every extracted theme MUST include:
 
 ## Research Phase (Optional)
 
-After initial theme identification and before Q&A refinement, optionally enrich themes with external context via web research. This phase only runs when `Research` is set to `enabled` in DiscoveryContext.md. When `disabled`, skip this section entirely — no behavioral change.
+After initial theme identification and before Q&A refinement, optionally enrich themes with external context via web research. This phase only runs when `Research` is set to `autonomous` or `guided` in DiscoveryContext.md. When `disabled`, skip this section entirely — no behavioral change.
 
-### Execution Mode Selection
+### Execution Modes
 
-When research is enabled, prompt the user for this stage's execution mode:
+Read the `Research` field from DiscoveryContext.md Configuration section to determine mode:
 
 - **Autonomous**: Agent identifies the most ambiguous or novel themes (those with low confidence, unclear terminology, or implicit assumptions), constructs research questions, and delegates without user input
 - **Guided**: Agent presents identified themes with a recommendation of which to research and why (e.g., "These 3 of 8 themes reference standards or technologies that would benefit from external context"). User confirms, adjusts the selection, or skips. For large theme sets (10+), group by category and recommend a focused subset rather than listing all individually.
-- **Skip**: No research for this stage — proceed directly to Q&A
 
 ### Research Delegation
 

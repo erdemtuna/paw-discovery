@@ -133,15 +133,14 @@ Add effort notes to correlation entries:
 
 ## Research Phase (Optional)
 
-After initial correlation analysis (match/gap identification and effort checks) and before artifact creation, optionally investigate gap feasibility via web research. This phase only runs when `Research` is set to `enabled` in DiscoveryContext.md. When `disabled`, skip this section entirely — no behavioral change.
+After initial correlation analysis (match/gap identification and effort checks) and before artifact creation, optionally investigate gap feasibility via web research. This phase only runs when `Research` is set to `autonomous` or `guided` in DiscoveryContext.md. When `disabled`, skip this section entirely — no behavioral change.
 
-### Execution Mode Selection
+### Execution Modes
 
-When research is enabled, prompt the user for this stage's execution mode:
+Read the `Research` field from DiscoveryContext.md Configuration section to determine mode:
 
 - **Autonomous**: Agent researches all identified gaps (and optionally partial matches with unclear feasibility)
 - **Guided**: Agent presents gaps with a recommendation of which to research (e.g., "These 3 gaps would benefit most from feasibility research: [gap list]"). User confirms, adjusts the selection, or skips.
-- **Skip**: No research for this stage — proceed to artifact creation
 
 ### Research Delegation
 

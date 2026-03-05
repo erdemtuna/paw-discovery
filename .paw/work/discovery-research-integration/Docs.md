@@ -28,7 +28,7 @@ Research runs via subagent delegation (same pattern as Mapping → paw-code-rese
 
 **Inline subagent prompts**: Research instructions are embedded in the extraction/correlation skills rather than a dedicated `paw-discovery-research` skill. Each stage has distinct research scopes (enrichment vs. feasibility) that don't generalize into a single reusable skill.
 
-**Per-stage mode selection**: Rather than a single mode for all research, users choose autonomous/guided/skip at each research-eligible stage. This provides fine-grained control without configuration complexity.
+**Init-time mode selection**: The research mode (autonomous/guided/disabled) is configured once at init and applies to both research-eligible stages. This keeps the workflow flowing without repeated mode prompts.
 
 ### Integration Points
 
@@ -56,12 +56,10 @@ Research runs via subagent delegation (same pattern as Mapping → paw-code-rese
 ```
 Let's start a Discovery workflow for "Q1 Planning"
 ```
-When prompted for configuration, set Research to `enabled`.
+When prompted for configuration, set Research to `autonomous` or `guided`.
 
-**At each research-eligible stage**, the agent prompts for execution mode:
-- **Autonomous**: Agent researches themes/gaps without asking
-- **Guided**: Agent recommends which themes/gaps to research; you confirm or adjust
-- **Skip**: No research for this stage
+- **Autonomous**: Agent researches themes/gaps without asking at each eligible stage
+- **Guided**: Agent recommends which themes/gaps to research; you confirm or adjust at each eligible stage
 
 ### Configuration
 
@@ -69,7 +67,7 @@ Research is configured via the `Research` field in `DiscoveryContext.md`:
 
 ```markdown
 ## Configuration
-- **Research**: enabled
+- **Research**: autonomous
 ```
 
 ### Research Artifacts

@@ -186,18 +186,13 @@ Each stage includes a mandatory review skill regardless of policy.
 
 ## Research (Optional)
 
-Discovery supports opt-in web research to enrich themes and assess gap feasibility:
+Discovery supports opt-in web research to enrich themes and assess gap feasibility. The research mode is configured at init time:
 
 | Setting | Behavior |
 |---------|----------|
-| `enabled` | Extraction and Correlation stages offer web research |
 | `disabled` (default) | Standard behavior, no web research |
-
-When research is enabled, each research-eligible stage prompts for an execution mode:
-
-- **Autonomous**: Agent researches themes/gaps without asking
-- **Guided**: Agent recommends what to research; you confirm or adjust
-- **Skip**: No research for this stage
+| `autonomous` | Agent researches themes/gaps without asking at Extraction and Correlation stages |
+| `guided` | Agent recommends what to research; you confirm or adjust at each eligible stage |
 
 Research findings are synthesized into the main artifacts. Separate provenance files (`ExtractionResearch.md`, `CorrelationResearch.md`) preserve source traceability.
 
