@@ -168,7 +168,7 @@ Accepting creates a new PAW work with:
 Discovery supports iterative refinement. When you add new documents to `inputs/`:
 
 1. **Request re-extraction**: "Re-run extraction with the new documents"
-2. **Cascade invalidation**: Downstream artifacts (Mapping, Correlation, Roadmap) are marked stale
+2. **Cascade invalidation**: All downstream artifacts are marked stale and re-processed
 3. **Automatic re-run**: The workflow re-processes affected stages
 
 The `DiscoveryContext.md` tracks which stages need re-running.

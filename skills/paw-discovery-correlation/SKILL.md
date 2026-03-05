@@ -222,7 +222,7 @@ match_count: [direct matches]
 gap_count: [gaps]
 combination_count: [combinations]
 partial_count: [partial matches]
-research_conducted: [true/false]
+research_conducted: true  # only include this field when research was conducted
 status: complete
 ---
 
@@ -319,6 +319,7 @@ If all themes are gaps (no matching capabilities):
 - [ ] Relevance issues surfaced (if any)
 - [ ] YAML frontmatter counts are accurate
 - [ ] Strategic insights section provides value for prioritization
+- [ ] If research enabled: CorrelationResearch.md created and feasibility context added to gap entries
 
 ## Completion Response
 
@@ -326,4 +327,5 @@ Report to PAW Discovery agent:
 - Artifact path: `.paw/discovery/<work-id>/Correlation.md`
 - Correlation summary (X matches, Y gaps, Z combinations)
 - Relevance assessment (aligned / mismatch resolved)
+- Research conducted: yes/no (if yes: `.paw/discovery/<work-id>/CorrelationResearch.md`)
 - Ready for correlation review

@@ -143,7 +143,7 @@ After initial theme identification and before Q&A refinement, optionally enrich 
 When research is enabled, prompt the user for this stage's execution mode:
 
 - **Autonomous**: Agent identifies the most ambiguous or novel themes (those with low confidence, unclear terminology, or implicit assumptions), constructs research questions, and delegates without user input
-- **Guided**: Agent presents identified themes with a recommendation of which to research and why (e.g., "These 3 of 8 themes reference standards or technologies that would benefit from external context"). User confirms, adjusts the selection, or skips.
+- **Guided**: Agent presents identified themes with a recommendation of which to research and why (e.g., "These 3 of 8 themes reference standards or technologies that would benefit from external context"). User confirms, adjusts the selection, or skips. For large theme sets (10+), group by category and recommend a focused subset rather than listing all individually.
 - **Skip**: No research for this stage — proceed directly to Q&A
 
 ### Research Delegation
@@ -280,7 +280,7 @@ source_documents:
     tokens: [approximate vision tokens]
 theme_count: [N]
 conflict_count: [resolved conflicts]
-research_conducted: [true/false]
+research_conducted: true  # only include this field when research was conducted
 status: complete
 ---
 
@@ -379,6 +379,7 @@ When re-invoked after inputs change:
 - [ ] Extraction.md has valid YAML frontmatter
 - [ ] Theme categories are populated (features, needs, constraints, vision)
 - [ ] DiscoveryContext.md updated with current inputs list
+- [ ] If research enabled: ExtractionResearch.md created and findings synthesized into themes
 
 ## Completion Response
 
@@ -387,6 +388,7 @@ Report to PAW Discovery agent:
 - Theme counts by category
 - Conflict resolutions (if any)
 - Open questions (if any)
+- Research conducted: yes/no (if yes: `.paw/discovery/<work-id>/ExtractionResearch.md`)
 - Ready for extraction review
 
 **State Update**: Update DiscoveryContext.md with:
