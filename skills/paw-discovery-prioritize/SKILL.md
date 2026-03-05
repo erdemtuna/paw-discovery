@@ -1,22 +1,30 @@
 ---
 name: paw-discovery-prioritize
-description: Prioritization activity skill for PAW Discovery workflow. Applies multi-factor analysis to produce MVP roadmap with PAW handoff option.
+description: Prioritization activity skill for PAW Discovery workflow. Merges scoping and multi-factor prioritization into a single stage with configurable execution modes to produce MVP roadmap with PAW handoff option.
 ---
 
 # Discovery Prioritization
 
-> **Execution Context**: This skill runs **directly** in the PAW Discovery session, as tradeoff discussion requires interactive user collaboration.
+> **Execution Context**: This skill runs **directly** in the PAW Discovery session, as scoping and tradeoff discussion require interactive user collaboration.
 
-Apply multi-factor prioritization to correlated themes to produce a ranked MVP roadmap. Offer to initiate PAW workflow for the top-priority item.
+Apply scoping and multi-factor prioritization to produce a ranked MVP roadmap. This stage is the single decision point for delivery scope — JourneyMap provides the vision, Roadmap determines what ships.
+
+## Configuration
+
+Read DiscoveryContext.md for:
+- `Prioritization Mode`: `interactive` | `guided` | `autonomous`
+
+If `Prioritization Mode` is missing or unrecognized, default to `guided`.
 
 ## Capabilities
 
 - Read Correlation.md for theme-capability relationships
-- Read JourneyMap.md for journey criticality and pain point severity (if exists)
+- Read JourneyMap.md for journey context and pain point severity (if exists)
+- Discover scoping options from journey step data (which steps are required vs optional)
+- Make scope decisions (journey depth) based on configured Prioritization Mode
 - Apply multi-factor prioritization framework (5 base factors + 3 journey factors)
 - Categorize items into MVP-Critical / MVP-Nice-to-Have / Post-MVP
-- Generate prioritized roadmap autonomously
-- Offer single Q&A pass for adjustments
+- Generate prioritized roadmap with scoping decisions
 - Offer PAW workflow handoff for top item
 - Generate Roadmap.md artifact
 
@@ -71,16 +79,16 @@ Consider correlation type: matches/partials = lower effort; gaps = higher effort
 
 From Correlation.md: matches/combinations = high leverage; gaps = low leverage
 
-### 6. Journey Criticality (from JourneyMap.md)
-**Question**: Is this feature required for an MVP-scoped journey?
+### 6. Journey Criticality (derived from JourneyMap.md)
+**Question**: Is this feature required for a user journey?
 
 | Score | Meaning |
 |-------|---------|
-| Critical | Required for an MVP-scoped journey (Partial or Full depth) |
-| Supporting | Enhances a journey but not strictly required |
+| Critical | Required by multiple journeys or by a journey addressing High-severity pain points |
+| Supporting | Enhances a journey but not strictly required for any step |
 | Unlinked | Not required for any defined journey |
 
-From JourneyMap.md Feature-to-Journey Mapping: check "MVP Critical" column.
+Derive from JourneyMap.md Feature-to-Journey Mapping: check which journeys require this feature and the severity of pain points those journeys address.
 
 ### 7. Pain Point Severity (from JourneyMap.md)
 **Question**: How severe is the pain point this feature addresses?
@@ -93,60 +101,66 @@ From JourneyMap.md Feature-to-Journey Mapping: check "MVP Critical" column.
 
 From JourneyMap.md Pain Points section: cross-reference which pain points the feature's journey addresses.
 
-### 8. MVP Scope (from JourneyMap.md)
-**Question**: Is this feature within the scoped MVP depth?
+### 8. Scoped Depth (determined during this stage)
+**Question**: Is this feature within the scoped MVP depth decided during prioritization?
 
 | Score | Meaning |
 |-------|---------|
-| In-Scope | Required for the scoped MVP depth of its journey |
-| Deferred | Only needed for Full depth, but journey scoped to Partial/Minimal |
+| In-Scope | Required for the MVP depth selected for its journey |
+| Deferred | Only needed for deeper journey depth than selected |
 | N/A | Feature not linked to any journey |
 
-From JourneyMap.md User Journeys: check "Scoped" field and which steps require this feature.
+Scope decisions are made during this stage based on the configured Prioritization Mode (see Execution Modes below). The agent analyzes journey steps to determine which features are needed at different depth levels.
+
+### Depth Derivation
+
+When scoping journeys, classify steps into depth levels based on journey structure:
+- **Full**: All journey steps included
+- **Partial**: Core steps that deliver the primary user goal, excluding extended/optional steps
+- **Minimal**: Only the essential steps required to address the primary pain point
+
+Determine boundaries from step dependencies and feature criticality — steps addressing High-severity pain points form the minimal core.
 
 ## JourneyMap.md Fallback Behavior
 
-When JourneyMap.md is absent (e.g., skipped Journey Grounding stage):
+When JourneyMap.md is absent or incomplete (e.g., skipped Journey Grounding stage, or missing `## User Journeys` / `## Feature-to-Journey Mapping` sections):
 
 - **Factors 6-8**: Mark as N/A in scoring; omit journey-related rationale from Roadmap.md
+- **Scoping**: Skip — no journeys to scope
 - **Priority calculation**: Use base factors (1-5) only
-- **Roadmap descriptions**: No journey criticality references; rely on correlation type and capability alignment
-
-This ensures backward compatibility with workflows that skip Journey Grounding or were started before this stage was introduced.
 
 ## Journey Factor Integration
 
 When JourneyMap.md exists, integrate journey factors into prioritization:
 
 **Elevation rules**:
-- Features marked "MVP Critical" in JourneyMap.md get priority boost
-- Features addressing High-severity pain points get priority boost
-- Features required for MVP-scoped journey depth are favored over deferred features
+- Features required by journeys addressing High-severity pain points get priority boost
+- Features required by multiple journeys get priority boost
+- Features within the scoped MVP depth are favored over deferred features
 
 **Demotion rules**:
 - Features not required for any journey may be deprioritized (unless high standalone value)
-- Features only needed for Full depth when journey is scoped to Partial/Minimal are deferred
+- Features only needed for deeper journey depth than selected scope are deferred
 
 **Rationale inclusion**:
 - Roadmap.md item descriptions should reference journey criticality
-- "Required for [Journey Name] MVP" or "Deferred: only needed for [Journey Name] full depth"
+- "Required for [Journey Name] MVP" or "Deferred: only needed at full depth for [Journey Name]"
 
-## Autonomous Prioritization
+## Execution Modes
 
-### Process
+Read `Prioritization Mode` from DiscoveryContext.md Configuration section.
 
-Generate the **complete roadmap autonomously** using the multi-factor framework:
-1. Read Correlation.md for base theme-capability data
-2. Read JourneyMap.md (if exists) for journey factors
-3. Score all candidate items against all applicable factors
-4. Apply dependency ordering, journey criticality, and value-to-effort ranking
-5. Categorize into priority buckets (see below)
-6. Present the full roadmap to user
+### Interactive Mode
 
-**One Q&A pass at the end**: After presenting the full roadmap, offer a single opportunity for adjustments:
-- "Here's the prioritized roadmap. Would you like to adjust any items before finalizing?"
-- If user requests changes, update and present the revised roadmap
-- Do NOT ask for confirmation on each individual item
+User makes explicit scoping and prioritization decisions. The agent presents each journey with depth options for the user to choose, scopes features accordingly, then presents the full prioritized roadmap for validation. If the user skips remaining journeys, default unscoped journeys to Full depth. One adjustment pass before finalizing.
+
+### Guided Mode
+
+User provides high-level direction (e.g., "focus on onboarding, defer admin features"). The agent interprets guidance to determine journey depths and feature scoping, then generates the complete roadmap. One adjustment pass before finalizing.
+
+### Autonomous Mode
+
+Agent determines all scoping and prioritization decisions based on pain severity and feature criticality. Higher-severity pain points drive deeper journey scope. Presents final roadmap with one adjustment opportunity.
 
 ### Priority Categories (Not Numbers)
 
@@ -223,6 +237,13 @@ status: complete
 ## Summary
 
 [2-3 sentences describing the prioritization outcome and recommended first steps]
+
+## Scoping Decisions
+
+| Journey | Depth | Rationale |
+|---------|-------|-----------|
+| J-1: [name] | [Full/Partial/Minimal] | [Why this depth was selected] |
+| J-2: [name] | [Full/Partial/Minimal] | [Why this depth was selected] |
 
 ## Priority Categories
 
@@ -303,8 +324,10 @@ Nice-to-Have items use condensed format (full details available in Extraction/Co
 - [ ] All correlated themes considered for roadmap
 - [ ] Base factors (1-5) scored for each item
 - [ ] Journey factors (6-8) scored when JourneyMap.md exists
+- [ ] Scoping decisions documented with rationale per journey (when JourneyMap.md exists)
 - [ ] Items categorized as MVP-Critical / MVP-Nice-to-Have / Post-MVP
 - [ ] Dependency order is logical within categories
+- [ ] Scoping decisions are coherent (no conflicting feature assignments across journeys)
 - [ ] Top MVP-Critical item identified for PAW handoff
 - [ ] PAW handoff brief is actionable
 - [ ] YAML frontmatter is complete

@@ -1,13 +1,13 @@
 ---
 name: paw-discovery-journey-grounding-review
-description: Review skill for PAW Discovery journey grounding stage. Validates JourneyMap.md quality before proceeding to scoping.
+description: Review skill for PAW Discovery journey grounding stage. Validates JourneyMap.md quality before proceeding to prioritization.
 ---
 
 # Discovery Journey Grounding Review
 
 > **Execution Context**: This skill runs in a **subagent** session, delegated by the PAW Discovery orchestrator. Return structured verdict to the orchestrator.
 
-Review JourneyMap.md artifact for quality and completeness before the journey scoping checkpoint proceeds.
+Review JourneyMap.md artifact for quality and completeness before prioritization proceeds.
 
 ## Review Criteria
 
@@ -31,7 +31,6 @@ Review JourneyMap.md artifact for quality and completeness before the journey sc
 - [ ] Journeys reference pain points they address
 - [ ] Steps include user actions and system responses
 - [ ] Required features are mapped to each step
-- [ ] MVP options (Full/Partial/Minimal) are defined
 
 ### Source Tracing Accuracy
 
@@ -57,7 +56,7 @@ Review JourneyMap.md artifact for quality and completeness before the journey sc
 ## Verdict
 
 Return one of:
-- **PASS**: All criteria met, proceed to journey scoping
+- **PASS**: All criteria met, proceed to prioritization
 - **REVISE**: Issues found, return to journey grounding with specific feedback
 
 ## Feedback Format
@@ -88,7 +87,7 @@ When returning REVISE, provide:
 |-----------|-----------|
 | Pain point source citations | 100% have [SOURCE] tags with document references |
 | Journey model | Present (grounded or synthesized with appropriate marking) |
-| Journey completeness | All journeys have goal, steps, feature mapping, MVP options |
+| Journey completeness | All journeys have goal, steps, feature mapping |
 | Source tracing | 100% of content marked [SOURCE] or [SYNTHESIS] |
 | Feature mapping | 100% of journey-required features listed |
 | Synthesis ratio | No threshold, but must be accurately calculated |
@@ -100,4 +99,4 @@ Report to PAW Discovery agent:
 - Issues found (if REVISE)
 - Recommended actions (if REVISE)
 - Source tracing summary (grounded vs. synthesized counts)
-- Ready for journey scoping checkpoint (if PASS)
+- Ready for prioritization (if PASS)

@@ -86,7 +86,6 @@ Create concrete journey scenarios:
    - Define the user goal being addressed
    - Outline steps to achieve the goal
    - Map required features to each step
-   - Define MVP options (Full/Partial/Minimal)
 
 2. Mark synthesized content with [SYNTHESIS]
 
@@ -190,7 +189,6 @@ status: complete
 
 - **Goal**: [What user wants to accomplish]
 - **Addresses**: PP-1, PP-3
-- **MVP Depth**: [To be set by scoping]
 
 #### Steps
 
@@ -202,24 +200,16 @@ status: complete
 2. **[Step Name]** [SOURCE or SYNTHESIS]
    ...
 
-#### MVP Options
-
-- **Full**: Steps 1-N, requires [feature list]
-- **Partial**: Steps 1-M, requires [feature list]
-- **Minimal**: Steps 1-K, requires [feature list]
-
-**Scoped**: [To be set by scoping checkpoint]
-
 ### J-2: [Journey Name]
 ...
 
 ## Feature-to-Journey Mapping
 
-| Feature ID | Feature Name | Required For Journeys | MVP Critical | Notes |
-|------------|--------------|----------------------|--------------|-------|
-| F-1 | [name] | J-1, J-2, J-3 | TBD | [from Correlation.md] |
-| F-2 | [name] | J-1 | TBD | |
-| F-3 | [name] | - | TBD | Not required for any journey |
+| Feature ID | Feature Name | Required For Journeys | Notes |
+|------------|--------------|----------------------|-------|
+| F-1 | [name] | J-1, J-2, J-3 | [from Correlation.md] |
+| F-2 | [name] | J-1 | |
+| F-3 | [name] | - | Not required for any journey |
 
 ## Source Tracing Summary
 
