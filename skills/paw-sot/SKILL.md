@@ -28,6 +28,7 @@ The calling skill provides a **review context** describing what to review and ho
 | `coordinates` | yes | diff range, artifact paths, or content description | What to point specialists at |
 | `output_dir` | yes | directory path | Where to write REVIEW-*.md files |
 | `specialists` | no | `all` (default) \| comma-separated names \| `adaptive:<N>` | Which specialists to invoke |
+| `context` | no | string (type-dependent default — see Context Filtering) | Domain filter for specialists (case-insensitive match) |
 | `interaction_mode` | yes | `parallel` \| `debate` | How specialists interact |
 | `interactive` | yes | `true` \| `false` \| `smart` | Whether to pause for user decisions on trade-offs |
 | `specialist_models` | no | `none` \| model pool \| pinned pairs \| mixed | Model assignment for specialists |
@@ -81,42 +82,41 @@ Resolution rules:
 - Skip malformed or empty specialist files with a warning; continue with remaining roster
 - If zero specialists found after discovery, fall back to built-in defaults with a warning
 
-## Context-Based Specialist Filtering
+## Context Filtering
 
-After discovery, filter specialists based on the review `type` using the type-to-context mapping (see Review Context Input Contract).
+> The `context` field (domain filter) is distinct from the review context input structure.
 
-**Filtering logic**:
+When the review context includes a `context` field, filter discovered specialists to only those matching the specified domain. This enables domain-specific reviews where only relevant specialists participate.
 
-1. Determine the target context from the review `type`:
-   - `diff` or `artifacts` → target context is `implementation`
-   - `discovery-artifacts` → target context is `discovery`
-   - `freeform` → **bypass filtering** (skip to step 4)
+**Specialist context declaration**: Specialists declare their domain via a `context` field in YAML frontmatter:
 
-2. For each discovered specialist, read the `context` field from YAML frontmatter:
-   ```yaml
-   ---
-   context: implementation  # or: discovery
-   ---
-   ```
+```yaml
+---
+context: implementation
+---
+```
 
-3. Include only specialists where `context` matches the target context
+**Matching behavior**:
+- Each specialist declares a single context value (comma-separated or array values are not supported)
+- Case-insensitive string comparison (e.g., `Business` matches `business`)
 
-4. For `freeform` type: include all discovered specialists regardless of `context` value (no filtering applied)
+**Default behaviors**:
+- Specialists without a `context` field, or with an empty/whitespace-only `context` value, default to `implementation`
+- Callers without `context` field:
+  - `diff` and `artifacts` types → default to `implementation`
+  - `discovery-artifacts` type → default to `discovery`
+  - `freeform` type → no filtering (all specialists participate)
 
-**Backward compatibility**: Specialists without a `context` field in frontmatter are treated as `context: implementation`. This means:
-- For `diff` and `artifacts` types: specialists without `context` are included (backward compatible)
-- For `discovery-artifacts` type: specialists without `context` are excluded (only explicit `context: discovery` specialists participate)
+**Zero-match handling**: If context filtering results in zero matching specialists:
+- **Interactive mode** (`interactive: true`): Warn and prompt user — options: proceed with all specialists, specify different context, or abort
+- **Non-interactive mode** (`interactive: false`): Warn and proceed with all specialists as fallback
+- **Smart mode** (`interactive: smart`): Warn and prompt user (escalate on zero-match — context misconfiguration is more likely a setup error than a soft signal, warranting user confirmation)
 
-**Specialist author guidance**: When creating new specialists, always include the `context` field in frontmatter:
-- Use `context: implementation` for specialists that review code, diffs, design documents, or implementation plans (security, architecture, performance, testing, etc.)
-- Use `context: discovery` for specialists that review synthesis artifacts like theme extractions, capability maps, correlations, and roadmaps (source-fidelity, coverage, reasoning, coherence, etc.)
-- Omitting the `context` field defaults to `implementation`, which may cause unexpected exclusion from Discovery reviews
-
-**Edge case**: If filtering results in zero specialists, report the condition to the calling context with a warning — the caller decides whether to proceed with fallback behavior or abort.
+**Execution order**: Context filtering occurs after specialist discovery and before adaptive selection. When both context filtering and adaptive selection are active, the adaptive algorithm selects from the already-filtered pool. When a fixed specialist list is provided, context filtering is skipped — explicit naming overrides domain filtering.
 
 ## Adaptive Selection
 
-When `specialists` is `adaptive:<N>`, select the N most relevant specialists from the **context-filtered roster** based on content analysis. Context filtering (see above) is applied first to produce the candidate pool, then adaptive selection chooses from that filtered pool.
+When `specialists` is `adaptive:<N>`, select the N most relevant specialists from the discovered roster (after any context filtering) based on content analysis.
 
 **Selection process**:
 1. Analyze the review target to identify dominant change categories — file types, affected subsystems, nature of changes (new logic, refactoring, config, API surface, data handling, test coverage)
@@ -283,6 +283,7 @@ The Finding sections (Must-Fix, Should-Fix, Consider) are the actionable items p
 ## Review Summary
 - Mode: society-of-thought (parallel | debate)
 - Specialists: [list of participating specialists]
+- Context: [context value used for filtering, or "none"]
 - Perspectives: [list of perspectives applied, or "none"]
 - Perspective cap: [configured cap value]
 - Selection rationale: [if adaptive mode was used]
@@ -327,7 +328,7 @@ For each thread:
 
 ## Output Artifacts
 
-Create `.gitignore` with content `*` in the output directory (if not already present).
+Create `.gitignore` with content `*` in the output directory (if not already present). This is a local-only scratch ignore marker — do NOT stage or commit it.
 
 | Review Type | Files Created |
 |-------------|---------------|
