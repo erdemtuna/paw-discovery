@@ -4,10 +4,12 @@
     <h3>Context-Driven Development for GitHub Copilot</h3>
     <p>
         <a href="https://github.com/lossyrob/phased-agent-workflow">
-            <img src="https://img.shields.io/badge/fork_of-PAW_by_lossyrob-blue?style=flat&logo=github" alt="Fork of PAW" />
+            <img src="https://img.shields.io/badge/built_on-PAW_by_@lossyrob-blue?style=for-the-badge&logo=github" alt="Built on PAW" />
         </a>
     </p>
 </div>
+
+> **This is a community fork of [Phased Agent Workflow (PAW)](https://github.com/lossyrob/phased-agent-workflow)**, created by [Rob Emanuele (@lossyrob)](https://github.com/lossyrob). PAW Discovery extends the original PAW framework with a **Discovery workflow** that transforms documents into prioritized MVP roadmaps, **Journey Grounding** for user-centric pain-point analysis, and **Web Research Integration** for enriching Discovery stages with external context. All core PAW implementation and review workflows are preserved from upstream.
 
 ## Try It Now
 
@@ -152,7 +154,9 @@ Configuration is set in `WorkflowContext.md` during initialization. See the [PAW
 
 ## Credits
 
-Inspired by Dex Horthy's "Advanced Context Engineering for Coding Agents" [talk](https://youtu.be/IS_y40zY-hc?si=27dVJV7LlYDh7woA) and [writeup](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/ace-fca.md). Original agent prompts adapted from HumanLayer's [Claude subagents and commands](https://github.com/humanlayer/humanlayer/tree/main/.claude).
+**PAW Discovery is built on [Phased Agent Workflow (PAW)](https://github.com/lossyrob/phased-agent-workflow)** by [Rob Emanuele (@lossyrob)](https://github.com/lossyrob). The core implementation workflow, review workflow, skills architecture, and specification framework are all Rob's work. This fork adds the Discovery workflow, Journey Grounding, and Web Research Integration on top of that foundation.
+
+PAW was inspired by Dex Horthy's "Advanced Context Engineering for Coding Agents" [talk](https://youtu.be/IS_y40zY-hc?si=27dVJV7LlYDh7woA) and [writeup](https://github.com/humanlayer/advanced-context-engineering-for-coding-agents/blob/main/ace-fca.md). Original agent prompts adapted from HumanLayer's [Claude subagents and commands](https://github.com/humanlayer/humanlayer/tree/main/.claude).
 
 Specification structure and checklist concepts were further informed by ideas from the open-source [Spec Kit](https://github.com/github/spec-kit) project, whose emphasis on prioritized user stories, explicit clarification markers, measurable success criteria, and structured quality checklists influenced the current spec workflow adaptation.
 
