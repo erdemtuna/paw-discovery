@@ -22,8 +22,10 @@ description: Shared git mechanics for PAW activity skills including branch namin
 - Treat `Repository Identity` as literal `<normalized-origin-slug>@<root-commit-sha>` metadata from `WorkflowContext.md`.
 - Treat `Execution Binding` as literal `worktree:<work-id>:<target-branch>` metadata from `WorkflowContext.md`.
 - Compare those values literally; do not invent alternate formats.
-- If `Execution Mode: worktree`, continue only when the current repo/branch/worktree proves this session is in the intended execution checkout. The caller checkout must never be mutated.
-- If the current working directory is the caller checkout, or the execution checkout is ambiguous, STOP and report recovery guidance instead of guessing.
+- If `Execution Mode: worktree`, continue only when the intended execution checkout directory can be proven from `WorkflowContext.md` metadata plus the repo/branch/worktree state for that checkout. The session cwd may differ from the execution checkout.
+- When the session cwd differs, all git operations MUST execute in the proven execution checkout directory, either by using path-scoped git commands (for example, `git -C <execution-checkout-path> ...`) or by switching the process cwd there. Do not use the caller checkout as proof or fallback.
+- The caller checkout must never be mutated.
+- If the execution checkout is ambiguous or cannot be proven from this session, STOP and report recovery guidance instead of guessing.
 
 ### Branch-State Matrix
 
