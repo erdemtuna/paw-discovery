@@ -22,8 +22,9 @@ copilot plugin install erdemtuna/paw-discovery
 This installs PAW as a [Copilot CLI plugin](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-finding-installing) with native update and uninstall support. Then start a workflow:
 
 ```bash
-copilot --agent PAW          # Implementation workflow
-copilot --agent PAW-Review   # PR review workflow
+copilot --agent PAW             # Implementation workflow
+copilot --agent PAW-Review      # PR review workflow
+copilot --agent PAW-Discovery   # Discovery workflow
 ```
 
 Or use `/agent` inside your session to switch agents.
