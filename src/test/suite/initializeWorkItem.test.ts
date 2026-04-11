@@ -124,6 +124,7 @@ suite('Initialize Work Item Helpers', () => {
       },
     }, '/tmp/repo');
 
+    assert.ok(prompt.includes('Load the `paw-workflow` skill and execute it.'));
     assert.ok(prompt.includes('- **target_branch**: auto'));
     assert.ok(prompt.includes('- **execution_mode**: worktree'));
     assert.ok(prompt.includes('- **issue_url**: https://github.com/example/repo/issues/123'));
@@ -381,6 +382,7 @@ suite('Initialize Work Item Helpers', () => {
 
     assert.deepStrictEqual(steps, ['openPawChat']);
     assert.strictEqual(prompts.length, 1);
+    assert.ok(prompts[0].includes('Load the `paw-workflow` skill and execute it.'));
     assert.ok(prompts[0].includes('- **execution_mode**: current-checkout'));
     assert.strictEqual(
       context.globalState.get<Record<string, unknown> | undefined>('paw.executionRegistry'),
@@ -436,16 +438,29 @@ suite('Initialize Work Item Helpers', () => {
       'paw.executionRegistry',
       {}
     );
+    const registryEntry = registry[createExecutionRegistryLookupKey(
+      executionMetadata.repositoryIdentity,
+      executionMetadata.executionBinding
+    )];
     assert.deepStrictEqual(
-      registry[createExecutionRegistryLookupKey(
-        executionMetadata.repositoryIdentity,
-        executionMetadata.executionBinding
-      )],
-      buildExecutionRegistryEntry(
-        executionMetadata,
-        '/tmp/repo-worktree',
-        'feature/test-worktree'
-      )
+      {
+        workId: registryEntry?.workId,
+        repositoryIdentity: registryEntry?.repositoryIdentity,
+        executionBinding: registryEntry?.executionBinding,
+        worktreePath: registryEntry?.worktreePath,
+        targetBranch: registryEntry?.targetBranch,
+      },
+      {
+        workId: executionMetadata.workId,
+        repositoryIdentity: executionMetadata.repositoryIdentity,
+        executionBinding: executionMetadata.executionBinding,
+        worktreePath: '/tmp/repo-worktree',
+        targetBranch: 'feature/test-worktree',
+      }
+    );
+    assert.ok(
+      registryEntry?.updatedAt,
+      'Registry entry should record an updatedAt timestamp'
     );
 
     const pendingState = context.globalState.get<Record<string, PendingWorktreeInit>>(
